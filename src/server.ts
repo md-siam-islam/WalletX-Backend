@@ -2,14 +2,16 @@
 import { Server } from "http"
 import app from "./app";
 import mongoose from "mongoose";
+import { envVariables } from "./app/config/env";
 
-const PORT = process.env.PORT || 5000;
+const PORT = envVariables.PORT || 5000;
 // const PORT = process.env.PORT || 5000;
 let server: Server;
 
 async function startServer() {
     try {
-        await mongoose.connect("mongodb+srv://WalletX:9He2qwtuqJomAlzg@cluster0.5b559.mongodb.net/WalletX?retryWrites=true&w=majority&appName=Cluster0")
+        await mongoose.connect(envVariables.DB_URL)
+        // await mongoose.connect("mongodb+srv://WalletX:9He2qwtuqJomAlzg@cluster0.5b559.mongodb.net/WalletX?retryWrites=true&w=majority&appName=Cluster0")
 
         console.log("MongoDB connected");
 
