@@ -12,7 +12,6 @@ export enum UserStatus {
     SUSPENDED = 'suspended'
 }
 
-
 export interface Iuser {
     name: string,
     email?: string,
