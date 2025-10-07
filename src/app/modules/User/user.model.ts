@@ -14,6 +14,8 @@ const userSchema = new Schema<Iuser>({
     isActive: { type: String, enum: Object.values(UserStatus), default: UserStatus.ACTIVE },
     isVerified: { type: Boolean, default: true },
     isDeleted: { type: Boolean, default: false },
+    walletId: { type: String },
+    walletBalance: { type: Number },
     // wallet: { type: mongo.Types.ObjectId, ref: 'Wallet' },
     // transactions: [{ type: mongo.Types.ObjectId, ref: 'Transaction' }]
 },{

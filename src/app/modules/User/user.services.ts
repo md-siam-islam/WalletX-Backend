@@ -28,12 +28,13 @@ const  Createuser = async(payload : Iuser) => {
 
         const wallet = await Wallet.create([{userId : user[0]._id}] , {session});
 
+        const updateuser = await User.findByIdAndUpdate(user[0]._id , { walletId: wallet[0]._id , walletBalance: wallet[0].balance }, { new: true, session })
+
         await session.commitTransaction();
         session.endSession();
 
         return {
-            user,
-            wallet
+            User : updateuser,
         };
     } catch (error) {
         await session.abortTransaction();

@@ -23,5 +23,6 @@ export interface Iuser {
     isActive?: UserStatus,
     isVerified?: boolean,
     isDeleted?: boolean,
-    wallet?: Types.ObjectId[],
+    walletId?: Types.ObjectId[],
+    walletBalance?: number,
 }
