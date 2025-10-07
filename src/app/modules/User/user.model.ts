@@ -1,4 +1,4 @@
-import { model, mongo, Schema } from "mongoose";
+import { model, Schema } from "mongoose";
 import { Iuser, UserRole, UserStatus } from "./user.interface";
 
 

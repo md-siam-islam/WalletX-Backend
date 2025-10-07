@@ -10,7 +10,7 @@ const Createuserwithwallet = async (req: Request, res: Response , next: NextFunc
 
         res.status(200).json({
             success: true,
-            message: "User created successfully",
+            message: "User created successfully and wallet created successfully",
             data: user
         });
 
