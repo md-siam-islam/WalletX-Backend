@@ -75,8 +75,27 @@ const getSingleuser = async(id : string) => {
 
     return user;
 }
+
+const updateUser = async( id : string , payload: Partial<Iuser>) => {
+
+    if(!id){
+        throw new Error("User id is required");
+    }
+
+    const user = await User.findById(id);
+
+    if(!user){
+        throw new Error("User not found");
+    }   
+
+    const updatedUser = await User.findByIdAndUpdate(id , payload , {new : true , runValidators : true});
+
+    return updatedUser;
+
+}
 export const UserService = {
     Createuser,
     getAllusers,
-    getSingleuser
+    getSingleuser,
+    updateUser
 }

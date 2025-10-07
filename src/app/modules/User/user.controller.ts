@@ -39,7 +39,7 @@ const getSingleuser = async (req: Request, res: Response , next: NextFunction) =
 
     try {
         const user = await UserService.getSingleuser(req.params.id);
-        
+
         res.status(200).json({
             success: true,
             message: "User retrieved successfully",
@@ -50,10 +50,30 @@ const getSingleuser = async (req: Request, res: Response , next: NextFunction) =
     }
 }
 
+const updateUser = async (req: Request, res: Response , next: NextFunction) => {
+
+    try {
+        const {id} = req.params;
+
+        const payload = req.body;
+
+        const updateUser = await UserService.updateUser(id , payload);
+
+        res.status(200).json({
+            success: true,
+            message: "User updated successfully",
+            data: updateUser
+        }); 
+            
+    } catch (error) {
+        next(error);
+    }
+}
     
 
 export const UserController = {
     Createuserwithwallet,
     getAllusers,    
-    getSingleuser
+    getSingleuser,
+    updateUser
 }

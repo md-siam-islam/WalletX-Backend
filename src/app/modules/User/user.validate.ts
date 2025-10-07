@@ -31,3 +31,22 @@
     walletId: z.string().optional(),
     walletBalance: z.number().min(0).optional()
  })
+ export const UpdateUserZodSchema = z.object({
+
+    name: z
+    .string({ message: "Name must be a string" })
+    .min(3, { message: "Name must be at least 3 characters" })
+    .max(50, { message: "Name must be at most 50 characters" }).optional(),
+
+    email: z
+    .string({ message: "Email must be a string" })
+    .email("Invalid email format").optional(),
+
+    password: z
+    .string({ message: "Password must be a string" })
+    .min(6, { message: "Password must be at least 6 characters" })
+    .max(100, { message: "Password must be at most 100 characters" }).optional(),
+
+    address: z.string().optional(),
+    picture: z.string().optional(),
+ })
