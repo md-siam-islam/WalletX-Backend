@@ -7,6 +7,7 @@ import { UserController } from './user.controller';
 
 router.post('/create', UserController.Createuserwithwallet);
 router.get('/allUsers', UserController.getAllusers);
+router.get('/:id', UserController.getSingleuser);
 
 
 export const UserRoute = router;

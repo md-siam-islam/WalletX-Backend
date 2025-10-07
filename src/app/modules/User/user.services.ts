@@ -60,7 +60,22 @@ const getAllusers = async() => {
         
 }
  
+const getSingleuser = async(id : string) => {
+
+    if(!id){
+        throw new Error("User id is required");
+    }
+
+    const user = await User.findById(id);
+
+    if(!user){
+        throw new Error("User not found");
+    }
+
+    return user;
+}
 export const UserService = {
     Createuser,
-    getAllusers
+    getAllusers,
+    getSingleuser
 }

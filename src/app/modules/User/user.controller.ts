@@ -35,9 +35,25 @@ const getAllusers = async (req: Request, res: Response , next: NextFunction) => 
     }
 }
 
+const getSingleuser = async (req: Request, res: Response , next: NextFunction) => {
+
+    try {
+        const user = await UserService.getSingleuser(req.params.id);
+        
+        res.status(200).json({
+            success: true,
+            message: "User retrieved successfully",
+            data: user
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
     
 
 export const UserController = {
     Createuserwithwallet,
-    getAllusers
+    getAllusers,    
+    getSingleuser
 }
