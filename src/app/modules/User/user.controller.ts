@@ -1,43 +1,36 @@
 import { NextFunction, Request, Response } from "express";
 import { UserService } from "./user.services";
+import { catchAsync } from "../utils/cathasync";
 
 
-const Createuserwithwallet = async (req: Request, res: Response , next: NextFunction) => {
+const Createuserwithwallet = catchAsync(async (req: Request, res: Response , next: NextFunction) => {
 
-    try {
-
-        const user = await UserService.Createuser(req.body);
+    const user = await UserService.Createuser(req.body);
 
         res.status(200).json({
             success: true,
             message: "User created successfully and wallet created successfully",
             data: user
         });
+})
 
 
-    } catch (error) {
-        next(error);
-    }
-}
+ const getAllusers = catchAsync(async (req: Request, res: Response , next: NextFunction) => {
 
-const getAllusers = async (req: Request, res: Response , next: NextFunction) => {
-
-    try {
-
+    
         const allusers = await UserService.getAllusers();
+        
         res.status(200).json({
             success: true,
             message: "Users retrieved successfully",
             data: allusers
         });
-    } catch (error) {
-        next(error);
-    }
-}
+ })
 
-const getSingleuser = async (req: Request, res: Response , next: NextFunction) => {
 
-    try {
+const getSingleuser = catchAsync(async (req: Request, res: Response , next: NextFunction) => {
+
+
         const user = await UserService.getSingleuser(req.params.id);
 
         res.status(200).json({
@@ -45,14 +38,10 @@ const getSingleuser = async (req: Request, res: Response , next: NextFunction) =
             message: "User retrieved successfully",
             data: user
         });
-    } catch (error) {
-        next(error);
-    }
-}
+})
 
-const updateUser = async (req: Request, res: Response , next: NextFunction) => {
+const updateUser = catchAsync(async (req: Request, res: Response , next: NextFunction) => {
 
-    try {
         const {id} = req.params;
 
         const payload = req.body;
@@ -65,10 +54,7 @@ const updateUser = async (req: Request, res: Response , next: NextFunction) => {
             data: updateUser
         }); 
             
-    } catch (error) {
-        next(error);
-    }
-}
+    });
     
 
 export const UserController = {
