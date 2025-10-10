@@ -24,7 +24,29 @@ const Userlogin = catchAsync(async (req: Request, res: Response , next: NextFunc
 
 })
 
+
+const userLogout = catchAsync(async (req: Request, res: Response , next: NextFunction) => {
+    res.clearCookie("accessToken" , {
+        httpOnly : true,
+        secure : false,
+        sameSite : "lax"
+    })
+    res.clearCookie("refreshToken" , {
+        httpOnly : true,
+        secure : false,
+        sameSite : "lax"
+    })
+
+        Sendresponse(res, {
+        success: true,
+        statuscode: httpStatus.OK,
+        message: "User Logout Successfull",
+        data: null
+            });
+})
+
 export const AuthController = {
-    Userlogin
+    Userlogin,
+    userLogout
 };
 
