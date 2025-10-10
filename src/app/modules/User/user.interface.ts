@@ -13,6 +13,7 @@ export enum UserStatus {
 }
 
 export interface Iuser {
+     _id :Types.ObjectId;
     name: string,
     email?: string,
     phone: string,

@@ -1,6 +1,7 @@
 import { Iuser } from "../User/user.interface"
 import { User } from "../User/user.model";
 import bcrypt from "bcryptjs";
+import { UserAccessToken } from "../utils/useraccesstoken";
 
 const UserLogin = async (payload: Partial<Iuser>) => {
 
@@ -13,6 +14,8 @@ const UserLogin = async (payload: Partial<Iuser>) => {
      if(!userAccount){ 
          throw new Error("User not found");
      }
+
+     const usertoken = UserAccessToken(userAccount);
      
      const isPasswordMatch = await bcrypt.compare(password as string , userAccount.password as string);
 
@@ -22,7 +25,11 @@ const UserLogin = async (payload: Partial<Iuser>) => {
 
      const { password: userPassword, ...user } = userAccount.toObject();
 
-     return user;
+     return {
+        AccessToken : usertoken.accessToken,
+        RefreshToken : usertoken.refreshToken,
+        User : user
+     }
 }
 
 export const AuthServices = {
