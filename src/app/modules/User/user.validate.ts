@@ -17,7 +17,7 @@
     .regex(/^(\+8801|8801|01)[3-9]\d{8}$/, {
       message: "Phone number must be a valid Bangladeshi number",
     }).min(11, { message: "Phone number must be at least 11 characters" }),
-    
+
     password: z
     .string({ message: "Password must be a string" })
     .min(6, { message: "Password must be at least 6 characters" })
