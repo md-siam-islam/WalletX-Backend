@@ -50,4 +50,6 @@
 
     address: z.string().optional(),
     picture: z.string().optional(),
+    phone: z.string().optional(),
+    
  })

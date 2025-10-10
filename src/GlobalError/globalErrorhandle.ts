@@ -28,9 +28,10 @@ export const globalErrorHandler = (
     });
   }
 
-  // 💥 Default fallback for unexpected errors
   res.status(500).json({
     success: false,
-    message: "Something went wrong! 🤦‍♂️",
+     message : `Somthing went wrong 🤦‍♂️🤦‍♂️ ${err.message} .`,
   });
+
+  
 };

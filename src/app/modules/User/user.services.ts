@@ -1,8 +1,9 @@
 import { User } from './user.model';
-import { Iuser } from "./user.interface"
+import { Iuser, UserRole } from "./user.interface"
 import { Wallet } from '../Wallet/wallet.model';
 import bcrypt from "bcryptjs";
 import { envVariables } from '../../config/env';
+import { JwtPayload } from 'jsonwebtoken';
 
 
 const  Createuser = async(payload : Iuser) => {
@@ -81,19 +82,38 @@ const getSingleuser = async(id : string) => {
     return user;
 }
 
-const updateUser = async( id : string , payload: Partial<Iuser>) => {
+const updateUser = async( userId : string, payload: Partial<Iuser> , decodedUser : JwtPayload) => {
 
-    if(!id){
-        throw new Error("User id is required");
-    }
-
-    const user = await User.findById(id);
+    const user = await User.findById(userId);
 
     if(!user){
         throw new Error("User not found");
-    }   
+    }
 
-    const updatedUser = await User.findByIdAndUpdate(id , payload , {new : true , runValidators : true});
+    if(payload.role){
+        if(decodedUser.role === UserRole.USER || decodedUser.role === UserRole.AGENT){
+         throw new Error("You are not authorized to update user role");
+        }
+    }
+    if(payload.isActive || payload.isVerified || payload.isDeleted){
+        if(decodedUser.role === UserRole.USER || decodedUser.role === UserRole.AGENT){
+         throw new Error("You are not authorized to update user isActive");
+        }
+    }
+
+    if(payload.phone){
+       throw new Error("You are not change Phone Number");
+    }
+
+    if(payload.password){
+        const hassedPassword = await bcrypt.hash(payload.password as string , Number(envVariables.BCRYPT_SALT_ROUNDS))
+
+        payload.password = hassedPassword
+        
+    }
+
+
+    const updatedUser = await User.findByIdAndUpdate(userId , payload , {new : true , runValidators : true});
 
     return updatedUser;
 

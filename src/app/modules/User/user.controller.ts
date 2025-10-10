@@ -3,6 +3,7 @@ import { UserService } from "./user.services";
 import { catchAsync } from "../utils/cathasync";
 import { Sendresponse } from "../utils/sendResponsive";
 import  httpStatus  from 'http-status-codes';
+import { JwtPayload } from "jsonwebtoken";
 
 const Createuserwithwallet = catchAsync(async (req: Request, res: Response , next: NextFunction) => {
 
@@ -49,13 +50,14 @@ const getSingleuser = catchAsync(async (req: Request, res: Response , next: Next
 
 const updateUser = catchAsync(async (req: Request, res: Response , next: NextFunction) => {
 
-        const {id} = req.params;
+     const userId = req.params.id
+      const payload = req.body;
 
-        const payload = req.body;
+      const decodedUser = req.user;
 
-        const updateUser = await UserService.updateUser(id , payload);
+        const updateUser = await UserService.updateUser(userId ,payload , decodedUser as JwtPayload);
 
-           Sendresponse(res ,{
+        Sendresponse(res ,{
         success : true,
         statuscode : httpStatus.OK,
         message : "User Update successfully",
