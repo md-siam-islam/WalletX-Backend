@@ -26,8 +26,8 @@ const UserLogin = async (payload: Partial<Iuser>) => {
      const { password: userPassword, ...user } = userAccount.toObject();
 
      return {
-        AccessToken : usertoken.accessToken,
-        RefreshToken : usertoken.refreshToken,
+        accessToken : usertoken.accessToken,
+        refreshToken : usertoken.refreshToken,
         User : user
      }
 }

@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from "express"
 import { catchAsync } from "../utils/cathasync"
 import { Sendresponse } from "../utils/sendResponsive";
 import { AuthServices } from './auth.services';
+import { setUserAccesstokenwithUserrefresstoken } from '../utils/setTokenCookies';
 
 const Userlogin = catchAsync(async (req: Request, res: Response , next: NextFunction) => {
 
@@ -12,6 +13,8 @@ const Userlogin = catchAsync(async (req: Request, res: Response , next: NextFunc
 
     const LoginUser = await AuthServices.UserLogin(payload);
 
+    setUserAccesstokenwithUserrefresstoken(res,LoginUser)
+
     Sendresponse(res ,{
         success : true,
         statuscode : httpStatus.OK,
@@ -20,7 +23,6 @@ const Userlogin = catchAsync(async (req: Request, res: Response , next: NextFunc
        })
 
 })
-
 
 export const AuthController = {
     Userlogin
