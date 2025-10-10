@@ -2,6 +2,8 @@ import { Iuser } from "../User/user.interface"
 import { User } from "../User/user.model";
 import bcrypt from "bcryptjs";
 import { UserAccessToken } from "../utils/useraccesstoken";
+import { JwtPayload } from "jsonwebtoken";
+import { envVariables } from "../../config/env";
 
 const UserLogin = async (payload: Partial<Iuser>) => {
 
@@ -32,6 +34,31 @@ const UserLogin = async (payload: Partial<Iuser>) => {
      }
 }
 
+const userResetPassword = async (oldPassword : string , newPassword : string ,decodedUser : JwtPayload ) => {
+
+    const user = await User.findById(decodedUser.userId);
+
+    if (!user) {
+        throw new Error("User not found from UserResetPassword");
+    }
+
+    const isMatch = bcrypt.compare(oldPassword, user.password as string )
+
+    if(!isMatch){
+        throw new Error("Old password is incorrect");
+    }
+
+    user.password = await bcrypt.hash(newPassword , Number(envVariables.BCRYPT_SALT_ROUNDS))
+
+    await user.save()
+    
+    return {
+       success: true,
+       message: "Password reset successful"
+   };
+}
+
 export const AuthServices = {
-    UserLogin
+    UserLogin,
+    userResetPassword
 }

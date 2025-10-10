@@ -4,6 +4,7 @@ import { catchAsync } from "../utils/cathasync"
 import { Sendresponse } from "../utils/sendResponsive";
 import { AuthServices } from './auth.services';
 import { setUserAccesstokenwithUserrefresstoken } from '../utils/setTokenCookies';
+import { JwtPayload } from 'jsonwebtoken';
 
 const Userlogin = catchAsync(async (req: Request, res: Response , next: NextFunction) => {
 
@@ -45,8 +46,31 @@ const userLogout = catchAsync(async (req: Request, res: Response , next: NextFun
             });
 })
 
+const ResetPassword = catchAsync(async (req: Request, res: Response , next: NextFunction) => {
+
+    const oldPassword = req.body.oldPassword 
+    const newPassword = req.body.newPassword
+
+    if (!oldPassword || !newPassword) {
+        return next(new Error("Old password and new password are required"));
+    }
+
+    const decodedUser = req.user
+
+    await AuthServices.userResetPassword(oldPassword , newPassword , decodedUser as JwtPayload)
+
+     Sendresponse(res, {
+        success: true,
+        statuscode: httpStatus.OK,
+        message: "User Reset Password Successfull",
+        data: null
+    });
+})
+
+
 export const AuthController = {
     Userlogin,
-    userLogout
+    userLogout,
+    ResetPassword
 };
 
