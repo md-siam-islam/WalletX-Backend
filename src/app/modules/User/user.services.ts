@@ -9,7 +9,6 @@ const  Createuser = async(payload : Iuser) => {
     session.startTransaction();
     // create user logic here
     try {
-        console.log("Creating user with payload:", payload);
 
         const {name , phone , password , email} = payload;
 
