@@ -1,6 +1,7 @@
 import { JwtPayload } from "jsonwebtoken"
 import { Wallet } from "./wallet.model";
 import { transactionstatus, transactiontype } from "../Transaction/transaction.interface";
+import { User } from "../User/user.model";
 
 
 const sendMoney = async (toUserId : string , amount : string , DecodedUser : JwtPayload) => {
@@ -41,19 +42,28 @@ const sendMoney = async (toUserId : string , amount : string , DecodedUser : Jwt
     date: new Date(),
 
   };
+    const Receivertransaction = {
+    type: transactiontype.RECEIVE,
+    amount: amount,
+    from: sender.userId,
+    to: receiver.userId,
+    status: transactionstatus.COMPLETED,
+    date: new Date(),
+  };
 
 
 
 const UpdateSender = await Wallet.findByIdAndUpdate(sender._id , { balance:SenderBalnce , $push: {transactions : transaction}} , { new : true , runValidators : true} )
 
-const Updatereceiver = await Wallet.findByIdAndUpdate(receiver._id , { balance:ReceiverBalnce , $push: {transactions : transaction}} , { new : true , runValidators : true} )
+const Updatereceiver = await Wallet.findByIdAndUpdate(receiver._id , { balance:ReceiverBalnce , $push: {transactions : Receivertransaction}} , { new : true , runValidators : true} )
 
-
+await User.findByIdAndUpdate(sender.userId , {balance : SenderBalnce})
+await User.findByIdAndUpdate(receiver.userId , {balance : ReceiverBalnce})
 
 return {
     sender: UpdateSender,
     receiver: Updatereceiver,
-    
+
   };
 
 
