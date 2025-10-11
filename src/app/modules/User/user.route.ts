@@ -7,7 +7,7 @@ import { checkAuth } from '../../../middlewares/checkAuth';
 import { UserRole } from './user.interface';
 
 
- const router = express.Router();
+const router = express.Router();
 
 router.post('/create', userValidate(CreateUserZodSchema), UserController.Createuserwithwallet);
 router.get('/allUsers',checkAuth(UserRole.ADMIN), UserController.getAllusers);

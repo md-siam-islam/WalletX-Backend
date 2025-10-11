@@ -12,7 +12,7 @@ export const UserAccessToken = (user : Partial<Iuser>) => {
         email: user.email,
         role: user.role,
         walletId:user.walletId,
-        walletBalance: user.walletBalance
+        balance: user.balance
     }
 
     const useraccessToken =  createToken(JwtPayload , envVariables.JWT_SECRET , envVariables.JWT_ACCESS_TOKEN_EXPIRE);

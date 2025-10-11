@@ -25,5 +25,5 @@ export interface Iuser {
     isVerified?: boolean,
     isDeleted?: boolean,
     walletId?: Types.ObjectId[],
-    walletBalance?: number,
+    balance?: number,
 }

@@ -7,7 +7,7 @@ export enum transactionstatus {
 export enum transactiontype {
     ADD = "add",
     WITHDRAW = "withdraw",
-    TRANSFER = "transfer"
+    SEND = "send"
 }
 
 export interface ITransaction {

@@ -15,7 +15,7 @@ const userSchema = new Schema<Iuser>({
     isVerified: { type: Boolean, default: true },
     isDeleted: { type: Boolean, default: false },
     walletId: { type: String },
-    walletBalance: { type: Number },
+    balance: { type: Number },
     // wallet: { type: mongo.Types.ObjectId, ref: 'Wallet' },
     // transactions: [{ type: mongo.Types.ObjectId, ref: 'Transaction' }]
 },{
