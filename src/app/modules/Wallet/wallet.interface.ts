@@ -3,7 +3,7 @@ import { ITransaction } from "../Transaction/transaction.interface";
 
 
 export interface IWallet {
-  userId: Types.ObjectId; 
+  userId: Types.ObjectId;
   balance?: number; 
   currency?: string; 
   transactions?: ITransaction[]; 

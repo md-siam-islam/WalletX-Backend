@@ -16,7 +16,7 @@ const RouterModule = [
         route : AuthRoutes
     },
     {
-        path : "wallet",
+        path : "/wallet",
         route : WalletRouter
     }
 ]

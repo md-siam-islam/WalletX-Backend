@@ -34,7 +34,7 @@ const  Createuser = async(payload : Iuser) => {
 
         const wallet = await Wallet.create([{userId : user[0]._id}] , {session});
 
-        const updateuser = await User.findByIdAndUpdate(user[0]._id , { walletId: wallet[0]._id , walletBalance: wallet[0].balance }, { new: true, session })
+        const updateuser = await User.findByIdAndUpdate(user[0]._id , { walletId: wallet[0]._id , balance: wallet[0].balance }, { new: true, session })
 
         await session.commitTransaction();
         session.endSession();
@@ -109,7 +109,7 @@ const updateUser = async( userId : string, payload: Partial<Iuser> , decodedUser
         const hassedPassword = await bcrypt.hash(payload.password as string , Number(envVariables.BCRYPT_SALT_ROUNDS))
 
         payload.password = hassedPassword
-        
+
     }
 
 
