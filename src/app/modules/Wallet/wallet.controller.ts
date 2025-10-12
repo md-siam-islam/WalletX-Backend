@@ -6,6 +6,23 @@ import { JwtPayload } from "jsonwebtoken";
 import { Sendresponse } from "../utils/sendResponsive";
 
  
+const UserAddMoney = catchAsync(async (req:Request , res: Response , next: NextFunction) => {
+
+
+    const amount = req.body.amount
+    const decodedUser = req.user
+
+    const AddMoney = await WalletServices.addMoney( amount , decodedUser as JwtPayload)
+
+    Sendresponse(res, {
+        success : true,
+        statuscode : httpStatus.OK,
+        message : "Add Money succesfull",
+        data : AddMoney
+    })
+
+
+})
  const UserSendMoney = catchAsync(async (req:Request , res: Response , next: NextFunction) => {
 
     // const {toUserId , amount} = req.body
@@ -28,6 +45,7 @@ import { Sendresponse } from "../utils/sendResponsive";
  })
 
 
- export const WalletController ={
+ export const WalletController = {
+    UserAddMoney,
     UserSendMoney
  } 
