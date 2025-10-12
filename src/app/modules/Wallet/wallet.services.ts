@@ -15,7 +15,12 @@ const addMoney = async (amount: string, decodedUser: JwtPayload) => {
         throw new Error("balance not found from 15 line")
     }
 
-    const money = account.balance + Number(amount)
+    const Amount = Number(amount)
+    if(isNaN(Amount) || Amount <=0){
+        throw new Error("Amount must be greater than 0.💸💸😁");
+    }
+
+    const money = account.balance + Amount
 
         const transaction = {
         type: transactiontype.ADD,
@@ -61,9 +66,14 @@ const sendMoney = async (toUserId: string, amount: string, DecodedUser: JwtPaylo
         throw new Error("Insufficient balance");
     }
 
-    const SenderBalnce = sender.balance - Number(amount)
+    const Amount = Number(amount)
+    if(isNaN(Amount) || Amount <=0){
+        throw new Error("Amount must be greater than 0.💸💸😁");
+    }
 
-    const ReceiverBalnce = receiver.balance + Number(amount)
+    const SenderBalnce = sender.balance - Amount
+
+    const ReceiverBalnce = receiver.balance + Amount
 
     const transaction = {
         type: transactiontype.SEND,
