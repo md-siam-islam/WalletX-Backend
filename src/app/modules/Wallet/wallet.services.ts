@@ -38,9 +38,8 @@ const addMoney = async (amount: string, decodedUser: JwtPayload) => {
         UpdateAccount
     }
 
-
-
 }
+
 const sendMoney = async (toUserId: string, amount: string, DecodedUser: JwtPayload) => {
 
     const sender = await Wallet.findOne({ userId: DecodedUser.userId });
@@ -62,22 +61,30 @@ const sendMoney = async (toUserId: string, amount: string, DecodedUser: JwtPaylo
         throw new Error("Sender balance not found");
     }
 
-    if (sender.balance < Number(amount)) {
-        throw new Error("Insufficient balance");
-    }
+   
 
     const Amount = Number(amount)
     if(isNaN(Amount) || Amount <=0){
         throw new Error("Amount must be greater than 0.💸💸😁");
     }
 
-    const SenderBalnce = sender.balance - Amount
+
+    const charge = Math.ceil((Amount/1000) * 10)
+
+    const totalDeduction = Amount + charge
+
+     if (sender.balance < Number(totalDeduction)) {
+       throw new Error(`Insufficient balance. You need at least ${totalDeduction} taka.`);
+    }
+
+    const SenderBalnce = sender.balance - totalDeduction
 
     const ReceiverBalnce = receiver.balance + Amount
 
-    const transaction = {
+    const Sendertransaction = {
         type: transactiontype.SEND,
         amount: amount,
+        charge : charge,
         from: sender.userId,
         to: receiver.userId,
         status: transactionstatus.COMPLETED,
@@ -94,23 +101,22 @@ const sendMoney = async (toUserId: string, amount: string, DecodedUser: JwtPaylo
     };
 
 
-    const UpdateSender = await Wallet.findByIdAndUpdate(sender._id, { balance: SenderBalnce, $push: { transactions: transaction } }, { new: true })
+    const UpdateSender = await Wallet.findByIdAndUpdate(sender._id, { balance: SenderBalnce, $push: { transactions: Sendertransaction } }, { new: true })
 
     const Updatereceiver = await Wallet.findByIdAndUpdate(receiver._id, { balance: ReceiverBalnce, $push: { transactions: Receivertransaction } }, { new: true, runValidators: true })
 
     await User.findByIdAndUpdate(sender.userId, { balance: SenderBalnce })
     await User.findByIdAndUpdate(receiver.userId, { balance: ReceiverBalnce })
 
-
-
     return {
         sender: UpdateSender,
         receiver: Updatereceiver,
 
     };
-
-
 }
+
+
+
 
 export const WalletServices = {
     addMoney,

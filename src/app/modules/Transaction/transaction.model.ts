@@ -5,6 +5,7 @@ export const TransactionSchema = new Schema<ITransaction>(
   {
     type: { type: String, enum: Object.values(transactiontype), required: true },
     amount: { type: Number, required: true },
+    charge: { type: Number },
     from: { type: String },
     to: { type: String },
     date: { type: Date, default: Date.now },

@@ -14,7 +14,8 @@ export enum transactiontype {
 
 export interface ITransaction {
   type: transactiontype;
-  amount: number;          
+  amount: number;
+  charge?: number;          
   from?: string;           
   to?: string;             
   date: Date;              
