@@ -115,10 +115,60 @@ const sendMoney = async (toUserId: string, amount: string, DecodedUser: JwtPaylo
     };
 }
 
+const cashOut = async(agentPhone : string , amount : string , decodedUser : JwtPayload) => {
+
+    const Agent = await User.findOne({phone : agentPhone})
+    const user = await User.findById(decodedUser.userId)
+
+    const agentWallet = await Wallet.findOne({userId : Agent?._id})
+    const userWallet = await Wallet.findOne({userId : user?._id})
+
+    if (!user || !userWallet) {
+    throw new Error("User wallet not found");
+  }
+
+  if (!Agent || !agentWallet) {
+    throw new Error("Agent wallet not found");
+  }
+
+  if(userWallet.balance === undefined){
+        throw new Error("User balance in not found ");
+  }
+
+
+  const Amount = Number(amount)
+  if(isNaN(Amount) && Amount <=0){
+    throw new Error("Invalid amount");
+  }
+
+
+  if(user.role === "user" && Agent.role !== "agent"){
+
+    throw new Error("You can only cash out to an agent number ❌");
+
+  }
+
+  const charge = Math.ceil((Amount / 1000) * 15)
+  const totalAmount = Amount + charge
+
+
+  if(userWallet.balance < totalAmount){
+
+     throw new Error("Insufficient balance");
+
+  }
+
+  
+
+    
+
+}
+
 
 
 
 export const WalletServices = {
     addMoney,
-    sendMoney
+    sendMoney,
+    cashOut
 }

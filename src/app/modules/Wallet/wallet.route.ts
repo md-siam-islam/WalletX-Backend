@@ -6,6 +6,8 @@ import { UserRole } from "../User/user.interface"
 const router = express.Router()
 
 router.post("/add-money" ,checkAuth(...Object.values(UserRole)), WalletController.UserAddMoney)
-router.post("/send-money" ,checkAuth(...Object.values(UserRole)), WalletController.UserSendMoney)
+
+// send money sudu user korte parbe 
+router.post("/send-money" ,checkAuth(UserRole.USER), WalletController.UserSendMoney)
 
 export const WalletRouter = router
