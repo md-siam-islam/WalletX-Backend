@@ -53,13 +53,15 @@ const UsercashOut =  catchAsync(async (req:Request , res: Response , next: NextF
 
     const decodedUser = req.user;
 
-    const Cashout = WalletServices.cashOut(agentPhone ,amount, decodedUser as JwtPayload)
+    const Cashout = await WalletServices.cashOut(agentPhone ,amount, decodedUser as JwtPayload)
+
+    console.log(Cashout)
 
     Sendresponse(res ,{
         success : true,
         statuscode : httpStatus.OK,
         message : "Cash Out Successfull",
-        data :Cashout
+        data : Cashout
        })
 
 })

@@ -85,17 +85,14 @@ const sendMoney = async (toUserId: string, amount: string, DecodedUser: JwtPaylo
         type: transactiontype.SEND,
         amount: amount,
         charge : charge,
-        from: sender.userId,
         to: receiver.userId,
         status: transactionstatus.COMPLETED,
         date: new Date(),
-
     };
     const Receivertransaction = {
         type: transactiontype.RECEIVE,
         amount: amount,
         from: sender.userId,
-        to: receiver.userId,
         status: transactionstatus.COMPLETED,
         date: new Date(),
     };
@@ -119,48 +116,73 @@ const cashOut = async(agentPhone : string , amount : string , decodedUser : JwtP
 
     const Agent = await User.findOne({phone : agentPhone})
     const user = await User.findById(decodedUser.userId)
-
     const agentWallet = await Wallet.findOne({userId : Agent?._id})
     const userWallet = await Wallet.findOne({userId : user?._id})
 
     if (!user || !userWallet) {
     throw new Error("User wallet not found");
-  }
+    }
 
   if (!Agent || !agentWallet) {
     throw new Error("Agent wallet not found");
-  }
+    }
 
   if(userWallet.balance === undefined){
-        throw new Error("User balance in not found ");
-  }
-
+    throw new Error("User balance in not found ");
+    }
+  if(agentWallet.balance === undefined){
+    throw new Error("Agent balance in not found ");
+    }
 
   const Amount = Number(amount)
-  if(isNaN(Amount) && Amount <=0){
+  if(isNaN(Amount) || Amount <=0){
     throw new Error("Invalid amount");
-  }
+    }
 
 
   if(user.role === "user" && Agent.role !== "agent"){
-
     throw new Error("You can only cash out to an agent number ❌");
-
-  }
+    }
 
   const charge = Math.ceil((Amount / 1000) * 15)
   const totalAmount = Amount + charge
 
 
   if(userWallet.balance < totalAmount){
-
      throw new Error("Insufficient balance");
+    }
 
-  }
+    const UserNewBlance = userWallet.balance - totalAmount
+    const AgentNewBlance = agentWallet.balance + Amount
 
-  
+        const Usertransaction = {
+        type: transactiontype.WITHDRAW,
+        amount: amount,
+        charge : charge,
+        to: Agent._id,
+        status: transactionstatus.COMPLETED,
+        date: new Date(),
+    };
+    const Receivertransaction = {
+        type: transactiontype.RECEIVE,
+        amount: amount,
+        from: user._id,
+        status: transactionstatus.COMPLETED,
+        date: new Date(),
+    };
 
-    
+    const UpdatedUser = await Wallet.findByIdAndUpdate(userWallet._id ,{balance : UserNewBlance , $push:{transactions : Usertransaction }}, {new : true , runValidators : true})
+
+    const UpdatedAgent= await Wallet.findByIdAndUpdate( agentWallet._id , {balance :AgentNewBlance , $push:{transactions : Receivertransaction }}, {new : true , runValidators : true})
+
+
+    await User.findByIdAndUpdate(user._id, { balance: UserNewBlance })
+    await User.findByIdAndUpdate(Agent._id, { balance: AgentNewBlance })
+
+    return {
+        User : UpdatedUser,
+        Agent : UpdatedAgent
+    }
 
 }
 
