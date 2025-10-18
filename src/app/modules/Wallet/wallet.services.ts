@@ -2,6 +2,7 @@ import { JwtPayload } from "jsonwebtoken"
 import { Wallet } from "./wallet.model";
 import { transactionstatus, transactiontype } from "../Transaction/transaction.interface";
 import { User } from "../User/user.model";
+import { error } from "console";
 
 const addMoney = async (amount: string, decodedUser: JwtPayload) => {
 
@@ -186,11 +187,34 @@ const cashOut = async(agentPhone : string , amount : string , decodedUser : JwtP
 
 }
 
+const myTransaction = async (decodedUser : JwtPayload) => {
+
+    const user = await User.findOne({phone : decodedUser.phone})
+
+    if(!user){
+      throw new Error("User not found");
+    }
+
+    const wallet = await Wallet.findOne({userId : decodedUser.userId})
+
+    if(!wallet){
+      throw new Error("User wallet not found");
+    }
+
+    const Transaction = {
+        Transaction : wallet.transactions,
+        Name : user.name,
+        Phone : user.phone
+    }
+
+    return Transaction
+}
 
 
 
 export const WalletServices = {
     addMoney,
     sendMoney,
-    cashOut
+    cashOut,
+    myTransaction
 }
