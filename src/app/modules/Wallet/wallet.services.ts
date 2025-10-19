@@ -2,7 +2,6 @@ import { JwtPayload } from "jsonwebtoken"
 import { Wallet } from "./wallet.model";
 import { transactionstatus, transactiontype } from "../Transaction/transaction.interface";
 import { User } from "../User/user.model";
-import { error } from "console";
 
 const addMoney = async (amount: string, decodedUser: JwtPayload) => {
 
@@ -222,11 +221,21 @@ const myTransaction = async (decodedUser: JwtPayload) => {
 }
 
 
+// cash in user account 
+
+const cashinUserAccount = async ( userPhone : string , amount : string , decodedUser : JwtPayload) => {
+
+    // const userWallet = Wallet.findOne({phone : })
+
+}
+
+
 
 export const WalletServices = {
     addMoney,
     sendMoney,
     cashOut,
     myTransaction,
-    mywallet
+    mywallet,
+    cashinUserAccount
 }

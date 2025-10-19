@@ -7,6 +7,7 @@ const WalletSchema = new Schema<IWallet>(
   {
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     balance: { type: Number, default: 50 },
+    phone : {type : String},
     currency: { type: String, default: "BDT" },
     status : {type : String , enum :Object.values(Walletstatus) , default : Walletstatus.ACTIVE},
     transactions: { type: [TransactionSchema], default: [] },

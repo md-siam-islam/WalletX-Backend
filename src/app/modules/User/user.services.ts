@@ -32,7 +32,7 @@ const  Createuser = async(payload : Iuser) => {
 
         const user = await User.create([{name , phone , password:HassPassword , email}] , {session});
 
-        const wallet = await Wallet.create([{userId : user[0]._id}] , {session});
+        const wallet = await Wallet.create([{userId : user[0]._id , phone : user[0].phone}] , {session});
 
         const updateuser = await User.findByIdAndUpdate(user[0]._id , { walletId: wallet[0]._id , balance: wallet[0].balance }, { new: true, session })
 

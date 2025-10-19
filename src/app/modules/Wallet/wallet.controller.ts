@@ -96,10 +96,33 @@ const myTransaction = catchAsync(async (req:Request , res: Response , next: Next
        })
 })
 
+
+
+// Agent cash in user account 
+
+
+const  CashinUserAccount =  catchAsync(async (req:Request , res: Response , next: NextFunction)  => {
+    
+        const userPhone = req.body.userPhone
+        const amount = req.body.amount
+        const decodedUser = req.user
+
+        const cashIn = await WalletServices.cashinUserAccount(userPhone , amount , decodedUser as JwtPayload)
+
+        Sendresponse(res ,{
+        success : true,
+        statuscode : httpStatus.OK,
+        message : "Cash in to user account Successfull",
+        data : cashIn
+       })
+
+})
+
  export const WalletController = {
     UserAddMoney,
     UserSendMoney,
     UsercashOut,
     myTransaction,
-    myWallet
+    myWallet,
+    CashinUserAccount
  } 
