@@ -107,6 +107,8 @@ const  CashinUserAccount =  catchAsync(async (req:Request , res: Response , next
         const amount = req.body.amount
         const decodedUser = req.user
 
+        console.log("User Phone " ,userPhone )
+
         const cashIn = await WalletServices.cashinUserAccount(userPhone , amount , decodedUser as JwtPayload)
 
         Sendresponse(res ,{

@@ -8,7 +8,8 @@ export enum transactiontype {
     ADD = "add",
     WITHDRAW = "withdraw",
     SEND = "send",
-    RECEIVE = "receive"
+    RECEIVE = "receive",
+    CASHIN = "Cash-in"
 }
 
 

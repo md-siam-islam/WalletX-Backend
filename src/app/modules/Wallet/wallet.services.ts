@@ -2,6 +2,7 @@ import { JwtPayload } from "jsonwebtoken"
 import { Wallet } from "./wallet.model";
 import { transactionstatus, transactiontype } from "../Transaction/transaction.interface";
 import { User } from "../User/user.model";
+import { Walletstatus } from "./wallet.interface";
 
 const addMoney = async (amount: string, decodedUser: JwtPayload) => {
 
@@ -221,11 +222,83 @@ const myTransaction = async (decodedUser: JwtPayload) => {
 }
 
 
-// cash in user account 
+// **********User wallet function sector end */*************** */
 
-const cashinUserAccount = async ( userPhone : string , amount : string , decodedUser : JwtPayload) => {
 
-    // const userWallet = Wallet.findOne({phone : })
+
+// cash in user account  *****Agent  section start *****
+const cashinUserAccount = async (userPhone: string, amount: string, decodedUser: JwtPayload) => {
+
+    const userWallet = await Wallet.findOne({ phone: userPhone })
+
+    if (!userWallet) {
+        throw new Error("User Wallet Not Found 😒 . place try again or , place check your input phone Number . Thankyou 😁");
+    }
+
+    if (userWallet?.balance === undefined) {
+        throw new Error("userWallet balance not found");
+    }
+
+    const user = await User.findOne({ phone: userPhone })
+
+    if (!user) {
+        throw new Error("User Not Found 😒 . place try again. Thankyou 😁");
+    }
+
+
+    const Agentaccount = await Wallet.findOne({ userId: decodedUser.userId })
+
+    if (!Agentaccount) {
+        throw new Error("Agentaccount Not Found 😒 . place try again. Thankyou 😁");
+    }
+
+    if (Agentaccount.balance === undefined) {
+        throw new Error("Agentaccount balance not found");
+    }
+
+
+
+    const Amount = Number(amount)
+    if (isNaN(Amount) || Amount <= 0) {
+        throw new Error("Invalid amount");
+    }
+
+    if (Agentaccount.balance < Amount) {
+
+        throw new Error(`Insufficient balance. You need at least ${Amount} taka.`);
+    }
+
+    const AgentNewBalnce = Agentaccount.balance - Amount
+    const userNewBalnce = userWallet.balance + Amount
+
+    const AgentTransaction = {
+        type: transactiontype.CASHIN,
+        amount: Amount,
+        to: userWallet.userId,
+        date: new Date(),
+        status: transactionstatus.COMPLETED
+    }
+
+    const UserTransaction = {
+        type: transactiontype.CASHIN,
+        amount: Amount,
+        from: Agentaccount.userId,
+        date: new Date(),
+        status: transactionstatus.COMPLETED
+    }
+
+    const UpdaredAgent = await Wallet.findOneAndUpdate({userId : Agentaccount.userId} , {balance :AgentNewBalnce , $push:{transactions : AgentTransaction} } , {new : true})
+
+    const Updareduser = await Wallet.findOneAndUpdate({userId : userWallet.userId} , {balance :userNewBalnce , $push:{transactions : UserTransaction} } , {new : true})
+
+    await User.findByIdAndUpdate(user._id , { balance : userNewBalnce})
+    await User.findByIdAndUpdate(Agentaccount.userId , {balance : AgentNewBalnce})
+
+
+    return {
+        Agent : UpdaredAgent,
+        User : Updareduser
+    }
 
 }
 

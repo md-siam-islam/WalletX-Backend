@@ -15,4 +15,9 @@ router.get("/me" , checkAuth(...Object.values(UserRole)) , WalletController.myWa
 
 router.get("/transaction" , checkAuth(...Object.values(UserRole)) , WalletController.myTransaction)
 
+
+// cash in agent 
+
+router.post("/agent/cash-in" ,checkAuth(UserRole.AGENT) , WalletController.CashinUserAccount )
+
 export const WalletRouter = router
