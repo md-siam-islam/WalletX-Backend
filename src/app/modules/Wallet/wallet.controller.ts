@@ -66,6 +66,21 @@ const UsercashOut =  catchAsync(async (req:Request , res: Response , next: NextF
 
 })
 
+const myWallet =  catchAsync(async (req:Request , res: Response , next: NextFunction) =>{
+
+    const decodedUser = req.user
+
+    console.log( "decodedUser", decodedUser)
+
+    const wallet = await WalletServices.mywallet(decodedUser as JwtPayload)
+
+    Sendresponse(res ,{
+        success : true,
+        statuscode : httpStatus.OK,
+        message : "Wallet get Successfull",
+        data : wallet
+       })
+})
 
 const myTransaction = catchAsync(async (req:Request , res: Response , next: NextFunction) => {
 
@@ -85,5 +100,6 @@ const myTransaction = catchAsync(async (req:Request , res: Response , next: Next
     UserAddMoney,
     UserSendMoney,
     UsercashOut,
-    myTransaction
+    myTransaction,
+    myWallet
  } 

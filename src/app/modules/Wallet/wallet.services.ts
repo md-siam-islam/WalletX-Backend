@@ -17,13 +17,13 @@ const addMoney = async (amount: string, decodedUser: JwtPayload) => {
     }
 
     const Amount = Number(amount)
-    if(isNaN(Amount) || Amount <=0){
+    if (isNaN(Amount) || Amount <= 0) {
         throw new Error("Amount must be greater than 0.💸💸😁");
     }
 
     const money = account.balance + Amount
 
-        const transaction = {
+    const transaction = {
         type: transactiontype.ADD,
         amount: amount,
         status: transactionstatus.COMPLETED,
@@ -62,20 +62,20 @@ const sendMoney = async (toUserId: string, amount: string, DecodedUser: JwtPaylo
         throw new Error("Sender balance not found");
     }
 
-   
+
 
     const Amount = Number(amount)
-    if(isNaN(Amount) || Amount <=0){
+    if (isNaN(Amount) || Amount <= 0) {
         throw new Error("Amount must be greater than 0.💸💸😁");
     }
 
 
-    const charge = Math.ceil((Amount/1000) * 10)
+    const charge = Math.ceil((Amount / 1000) * 10)
 
     const totalDeduction = Amount + charge
 
-     if (sender.balance < Number(totalDeduction)) {
-       throw new Error(`Insufficient balance. You need at least ${totalDeduction} taka.`);
+    if (sender.balance < Number(totalDeduction)) {
+        throw new Error(`Insufficient balance. You need at least ${totalDeduction} taka.`);
     }
 
     const SenderBalnce = sender.balance - totalDeduction
@@ -85,7 +85,7 @@ const sendMoney = async (toUserId: string, amount: string, DecodedUser: JwtPaylo
     const Sendertransaction = {
         type: transactiontype.SEND,
         amount: amount,
-        charge : charge,
+        charge: charge,
         to: receiver.userId,
         status: transactionstatus.COMPLETED,
         date: new Date(),
@@ -113,53 +113,53 @@ const sendMoney = async (toUserId: string, amount: string, DecodedUser: JwtPaylo
     };
 }
 
-const cashOut = async(agentPhone : string , amount : string , decodedUser : JwtPayload) => {
+const cashOut = async (agentPhone: string, amount: string, decodedUser: JwtPayload) => {
 
-    const Agent = await User.findOne({phone : agentPhone})
+    const Agent = await User.findOne({ phone: agentPhone })
     const user = await User.findById(decodedUser.userId)
-    const agentWallet = await Wallet.findOne({userId : Agent?._id})
-    const userWallet = await Wallet.findOne({userId : user?._id})
+    const agentWallet = await Wallet.findOne({ userId: Agent?._id })
+    const userWallet = await Wallet.findOne({ userId: user?._id })
 
     if (!user || !userWallet) {
-    throw new Error("User wallet not found");
+        throw new Error("User wallet not found");
     }
 
-  if (!Agent || !agentWallet) {
-    throw new Error("Agent wallet not found");
+    if (!Agent || !agentWallet) {
+        throw new Error("Agent wallet not found");
     }
 
-  if(userWallet.balance === undefined){
-    throw new Error("User balance in not found ");
+    if (userWallet.balance === undefined) {
+        throw new Error("User balance in not found ");
     }
-  if(agentWallet.balance === undefined){
-    throw new Error("Agent balance in not found ");
-    }
-
-  const Amount = Number(amount)
-  if(isNaN(Amount) || Amount <=0){
-    throw new Error("Invalid amount");
+    if (agentWallet.balance === undefined) {
+        throw new Error("Agent balance in not found ");
     }
 
-
-  if(user.role === "user" && Agent.role !== "agent"){
-    throw new Error("You can only cash out to an agent number ❌");
+    const Amount = Number(amount)
+    if (isNaN(Amount) || Amount <= 0) {
+        throw new Error("Invalid amount");
     }
 
-  const charge = Math.ceil((Amount / 1000) * 15)
-  const totalAmount = Amount + charge
+
+    if (user.role === "user" && Agent.role !== "agent") {
+        throw new Error("You can only cash out to an agent number ❌");
+    }
+
+    const charge = Math.ceil((Amount / 1000) * 15)
+    const totalAmount = Amount + charge
 
 
-  if(userWallet.balance < totalAmount){
-     throw new Error("Insufficient balance");
+    if (userWallet.balance < totalAmount) {
+        throw new Error("Insufficient balance");
     }
 
     const UserNewBlance = userWallet.balance - totalAmount
     const AgentNewBlance = agentWallet.balance + Amount
 
-        const Usertransaction = {
+    const Usertransaction = {
         type: transactiontype.WITHDRAW,
         amount: amount,
-        charge : charge,
+        charge: charge,
         to: Agent._id,
         status: transactionstatus.COMPLETED,
         date: new Date(),
@@ -172,39 +172,50 @@ const cashOut = async(agentPhone : string , amount : string , decodedUser : JwtP
         date: new Date(),
     };
 
-    const UpdatedUser = await Wallet.findByIdAndUpdate(userWallet._id ,{balance : UserNewBlance , $push:{transactions : Usertransaction }}, {new : true , runValidators : true})
+    const UpdatedUser = await Wallet.findByIdAndUpdate(userWallet._id, { balance: UserNewBlance, $push: { transactions: Usertransaction } }, { new: true, runValidators: true })
 
-    const UpdatedAgent= await Wallet.findByIdAndUpdate( agentWallet._id , {balance :AgentNewBlance , $push:{transactions : Receivertransaction }}, {new : true , runValidators : true})
+    const UpdatedAgent = await Wallet.findByIdAndUpdate(agentWallet._id, { balance: AgentNewBlance, $push: { transactions: Receivertransaction } }, { new: true, runValidators: true })
 
 
     await User.findByIdAndUpdate(user._id, { balance: UserNewBlance })
     await User.findByIdAndUpdate(Agent._id, { balance: AgentNewBlance })
 
     return {
-        User : UpdatedUser,
-        Agent : UpdatedAgent
+        User: UpdatedUser,
+        Agent: UpdatedAgent
     }
 
 }
 
-const myTransaction = async (decodedUser : JwtPayload) => {
+const mywallet = async (decodedUser: JwtPayload) => {
 
-    const user = await User.findOne({phone : decodedUser.phone})
+    const Mywallet = await Wallet.findOne({ userId: decodedUser.userId })
 
-    if(!user){
-      throw new Error("User not found");
+    if (!Mywallet) {
+        throw new Error("User wallet not found");
     }
 
-    const wallet = await Wallet.findOne({userId : decodedUser.userId})
+    return Mywallet
+}
 
-    if(!wallet){
-      throw new Error("User wallet not found");
+const myTransaction = async (decodedUser: JwtPayload) => {
+
+    const user = await User.findOne({ phone: decodedUser.phone })
+
+    if (!user) {
+        throw new Error("User not found");
+    }
+
+    const wallet = await Wallet.findOne({ userId: decodedUser.userId })
+
+    if (!wallet) {
+        throw new Error("User wallet not found");
     }
 
     const Transaction = {
-        Transaction : wallet.transactions,
-        Name : user.name,
-        Phone : user.phone
+        Transaction: wallet.transactions,
+        Name: user.name,
+        Phone: user.phone
     }
 
     return Transaction
@@ -216,5 +227,6 @@ export const WalletServices = {
     addMoney,
     sendMoney,
     cashOut,
-    myTransaction
+    myTransaction,
+    mywallet
 }

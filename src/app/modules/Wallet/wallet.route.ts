@@ -11,6 +11,8 @@ router.post("/send-money" ,checkAuth(UserRole.USER), WalletController.UserSendMo
 // User cashOut 
 router.post("/cash-out" , checkAuth(UserRole.USER) , WalletController.UsercashOut)
 
+router.get("/me" , checkAuth(...Object.values(UserRole)) , WalletController.myWallet)
+
 router.get("/transaction" , checkAuth(...Object.values(UserRole)) , WalletController.myTransaction)
 
 export const WalletRouter = router
