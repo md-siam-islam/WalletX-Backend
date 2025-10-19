@@ -3,6 +3,7 @@ import { Server } from "http"
 import app from "./app";
 import mongoose from "mongoose";
 import { envVariables } from "./app/config/env";
+import { seedAdmin } from "./app/modules/utils/seedAdmin";
 
 const PORT = envVariables.PORT || 5000;
 // const PORT = process.env.PORT || 5000;
@@ -26,6 +27,7 @@ async function startServer() {
 
 (async () => {
     await startServer();
+    await seedAdmin()
 })();
 
 
