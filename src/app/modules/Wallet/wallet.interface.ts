@@ -9,6 +9,7 @@ export enum Walletstatus {
 
 export interface IWallet {
   userId: Types.ObjectId;
+  name : string ;
   phone : string;
   balance?: number; 
   currency?: string; 

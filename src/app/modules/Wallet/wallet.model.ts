@@ -6,6 +6,7 @@ import { TransactionSchema } from "../Transaction/transaction.model";
 const WalletSchema = new Schema<IWallet>(
   {
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    name : {type : String},
     balance: { type: Number, default: 50 },
     phone : {type : String},
     currency: { type: String, default: "BDT" },
