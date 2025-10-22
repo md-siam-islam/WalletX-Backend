@@ -3,6 +3,7 @@ import { AgentStatus, IAgentApplication } from "./becomeaAgent.interface"
 import { AgentApplication } from "./becomeaAgent.model";
 import { UserRole } from "../User/user.interface";
 import { User } from "../User/user.model";
+import { application } from "express";
 
 
 const ApplyAgentServices = async (decodedUser : JwtPayload) => {
@@ -17,7 +18,6 @@ const ApplyAgentServices = async (decodedUser : JwtPayload) => {
         throw new Error("You are already an agent");
     }
 
-
     const applicationPayload: IAgentApplication = {
         userId: decodedUser.userId,
         fullName : user.name,
@@ -27,15 +27,26 @@ const ApplyAgentServices = async (decodedUser : JwtPayload) => {
         status: AgentStatus.PENDING
     };
 
-
-
     const application = await AgentApplication.create(applicationPayload);
-
     return application;
+}
 
 
+const GetAllaplication = async () => {
+
+    const aplication = await AgentApplication.find({})
+
+    const totalAplication = await AgentApplication.countDocuments()
+
+    return {
+        data : aplication,
+        meta : {
+            total : totalAplication
+        }
+    }
 }
 
 export const becomeaAgentServices = {
-    ApplyAgentServices 
+    ApplyAgentServices ,
+    GetAllaplication
 }

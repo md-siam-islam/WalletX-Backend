@@ -21,7 +21,21 @@ const ApplyAgent = catchAsync(async (req: Request, res: Response, next: NextFunc
 
 })
 
+const GetAllApplyAgent = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+
+    const getall = await becomeaAgentServices.GetAllaplication()
+    
+      Sendresponse(res, {
+        success: true,
+        statuscode: httpStatus.OK,
+        message: "All aplication get Successfull",
+        data: getall
+    })
+
+})
+
 export const becomeaAgentController = {
-    ApplyAgent
+    ApplyAgent,
+    GetAllApplyAgent
 
 }
