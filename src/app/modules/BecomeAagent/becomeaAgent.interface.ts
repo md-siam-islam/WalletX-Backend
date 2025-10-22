@@ -9,7 +9,6 @@ export interface IAgentApplication {
   fullName: string;
   email?: string;
   phone: string;
-  nidNumber: string;
   address?: string;
   district?: string;
   status: AgentStatus
