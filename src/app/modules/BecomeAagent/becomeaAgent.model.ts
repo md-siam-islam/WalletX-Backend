@@ -1,9 +1,10 @@
-import { Schema } from "mongoose";
+import { model, Schema } from "mongoose";
 import { AgentStatus, IAgentApplication } from "./becomeaAgent.interface";
 
 
 export const AgentSchema = new Schema<IAgentApplication>(
     {
+        userId : { type: Schema.Types.ObjectId, ref: "User", required: true },
     fullName: { type: String, required: true },
     email: { type: String },
     phone: { type: String, required: true },
@@ -17,3 +18,5 @@ export const AgentSchema = new Schema<IAgentApplication>(
 
     }
 )
+
+export const AgentApplication = model<IAgentApplication>("AgentApplication", AgentSchema);

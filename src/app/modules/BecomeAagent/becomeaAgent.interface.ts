@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 
 export enum AgentStatus {
   PENDING = "pending",
@@ -6,6 +7,7 @@ export enum AgentStatus {
 }
 
 export interface IAgentApplication {
+    userId : Types.ObjectId;
   fullName: string;
   email?: string;
   phone: string;
