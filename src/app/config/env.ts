@@ -10,6 +10,8 @@ interface envinterface {
     ADMIN_PHONE: string,
     ADMIN_EMAIL: string,
     ADMIN_PASSWORD: string,
+    NODE_ENV: string,
+    FRONTEND_URL?: string
 }
 
 
@@ -23,7 +25,9 @@ const envLoad =(): envinterface => {
         'JWT_ACCESS_TOKEN_EXPIRE',
         "ADMIN_PHONE",
         "ADMIN_EMAIL",
-        "ADMIN_PASSWORD"
+        "ADMIN_PASSWORD",
+        "NODE_ENV",
+        "FRONTEND_URL"
     ]
 
     requiredEnv.forEach((env) => {
@@ -40,7 +44,9 @@ const envLoad =(): envinterface => {
         JWT_ACCESS_TOKEN_EXPIRE: process.env.JWT_ACCESS_TOKEN_EXPIRE as string,
         ADMIN_PHONE : process.env.ADMIN_PHONE as string ,
         ADMIN_EMAIL: process.env.ADMIN_EMAIL as string,
-        ADMIN_PASSWORD : process.env.ADMIN_PASSWORD as string
+        ADMIN_PASSWORD : process.env.ADMIN_PASSWORD as string,
+        NODE_ENV : process.env.NODE_ENV as string,
+        FRONTEND_URL : process.env.FRONTEND_URL as string,
     }
 }
 
