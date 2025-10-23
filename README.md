@@ -72,16 +72,22 @@ https://wallet-x-sable.vercel.app/api/v1/wallet/transaction  (My transaction)
 https://wallet-x-sable.vercel.app/api/v1/wallet/me(My Account)
 
 ##Agent
+
+
 https://wallet-x-sable.vercel.app/api/v1/wallet/agent/cash-in(Only Agent cash in user account)
 
 ##Become a Agent Apply
+
+
 https://wallet-x-sable.vercel.app/api/v1/become-agent/apply-agent
 
-https://wallet-x-sable.vercel.app/v1/become-agent/all-aplication(Only Admin)
+https://wallet-x-sable.vercel.app/v1/become-agent/all-aplication  (Only Admin)
 
 
 
 ##Backend live link :
+
+
 https://wallet-x-sable.vercel.app/
 
 
