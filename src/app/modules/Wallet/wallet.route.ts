@@ -20,4 +20,4 @@ router.get("/transaction" , checkAuth(...Object.values(UserRole)) , WalletContro
 
 router.post("/agent/cash-in" ,checkAuth(UserRole.AGENT) , WalletController.CashinUserAccount )
 
-export const WalletRouter = router
+export const WalletRouter = router 
