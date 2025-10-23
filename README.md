@@ -68,3 +68,8 @@ https://wallet-x-sable.vercel.app/v1/become-agent/all-aplication(Only Admin)
 
 
 
+Backend live link :
+https://wallet-x-sable.vercel.app/
+
+
+
